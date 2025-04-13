@@ -11,8 +11,14 @@ import Descriptions from "./lesson-2/Descriptions.jsx";
 import Options from "./lesson-2/Options.jsx";
 import FeedBack from "./lesson-2/FeedBack.jsx";
 import Notification from "./lesson-2/Notification.jsx";
+import Form from "./lesson-3/Form.jsx";
+import SearchBar from "./lesson-3/SearchBar.jsx";
+import ContactForm from "./lesson-3/ContactForm.jsx";
+import SearchBox from "./lesson-3/SearchBox.jsx";
+import ContactList from "./lesson-3/ContactList.jsx";
 
 function App() {
+  //  LESSON-2
   const [items, setItems] = useState(() => {
     const savedLocal = window.localStorage.getItem("feed-back");
 
@@ -25,6 +31,8 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem("feed-back", JSON.stringify(items));
   }, [items]);
+
+  // LESSON-1
 
   const totalFeedback = items.good + items.neutral + items.bad;
 
@@ -54,8 +62,41 @@ function App() {
     }
   }
 
+  // LESSON-3
+  // const [lang, setLang] = useState("uk");
+
+  // function hadleLogin(userDate) {
+  //   console.log(userDate);
+  // }
+
+  const [contacts, setContacts] = useState([]);
+
+  const [filter, setFilter] = useState("");
+
+  const filterContacts = contacts.filter((contact) =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  function addContact(newContact) {
+    setContacts((prev) => {
+      return [...prev, newContact];
+    });
+  }
+
+  function deleteContact(contactId) {
+    setContacts((prev) => {
+      return prev.filter((item) => item.id !== contactId);
+    });
+  }
+
   return (
     <div>
+      <ContactForm onAdd={addContact} />
+      <SearchBox value={filter} onFilter={setFilter} />
+      <ContactList contact={filterContacts} onDel={deleteContact} />
+      {/* <SearchBar value={lang} onSelect={setLang} /> */}
+
+      {/* <Form onLogin={hadleLogin} /> */}
       <Descriptions />
       <Options
         resetFeedBack={setItems}
